@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksc.framework.Mapper.ColumnClassMapper">
+
+    <resultMap id="BaseResultMap" type="com.zksc.framework.Entity.ColumnClass">
+        <result column="COLUMN_NAME" jdbcType="VARCHAR" property="columnName" />
+        <result column="DATA_TYPE" jdbcType="VARCHAR" property="dataType" />
+        <result column="COLUMN_COMMENT" jdbcType="VARCHAR" property="columnComment" />
+        <result column="COLUMN_KEY" jdbcType="VARCHAR" property="columnKey" />
+    </resultMap>
+
+    <resultMap id="TableClassMap" type="com.zksc.framework.Entity.TableClass">
+        <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName" />
+        <result column="TABLE_COMMENT" jdbcType="VARCHAR" property="tableComment" />
+    </resultMap>
+
+    <select id="getAllColumn" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT,COLUMN_KEY FROM information_schema.COLUMNS
+        WHERE 1=1
+        <trim>
+            <if test="tableName != null and tableName !=''">and TABLE_NAME = #{tableName}</if>
+            <if test="dataBaseName != null and dataBaseName !=''">and TABLE_SCHEMA = #{dataBaseName}</if>
+        </trim>
+    </select>
+
+    <select id="selectAllTable" parameterType="java.util.Map" resultMap="TableClassMap">
+        SELECT table_name,table_comment
+        FROM information_schema.TABLES
+        WHERE 1=1
+        <trim>
+            <if test="dataBaseName != null and dataBaseName !=''">and TABLE_SCHEMA = #{dataBaseName}</if>
+            <if test="tableName != null and tableName !=''">and table_name = #{tableName}</if>
+        </trim>
+    </select>
+</mapper>

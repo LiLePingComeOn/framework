@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksc.framework.Mapper.SysUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.zksc.framework.Entity.SysUser">
+        <result column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="user_password" property="userPassword" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="dal_flag" property="dalFlag" />
+    </resultMap>
+
+    <sql id="selectSysUser">
+        select
+        user_id,
+        user_name,
+        user_password,
+        create_time,
+        update_time,
+        create_by,
+        update_by,
+        dal_flag
+        FROM sys_user
+    </sql>
+
+    <insert id="insertSysUser" parameterType="SysUser">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="userPassword != null  and userPassword != ''">user_password,</if>
+            <if test="createTime != null">createTime,</if>
+            <if test="updateTime != null">updateTime,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="dalFlag != null  and dalFlag != ''">dal_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="userPassword != null  and userPassword != ''">#{userPassword},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="dalFlag != null  and dalFlag != ''">#{dalFlag},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteSysUserByUserId" parameterType="String">
+        delete from sys_user where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteSysUserByUserIds" parameterType="String">
+        delete from sys_user where user_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+        #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateSysUser" parameterType="SysUser">
+        update sys_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id = #{userId},</if>
+            <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+            <if test="userPassword != null  and userPassword != ''">user_password = #{userPassword},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="dalFlag != null  and dalFlag != ''">dal_flag = #{dalFlag},</if>
+        </trim>
+        <where>
+        user_id = #{userId}
+        </where>
+    </update>
+
+    <select id="selectSysUserList" resultMap="BaseResultMap" parameterType="SysUser">
+        <include refid="selectSysUser"></include>
+        <where>
+            1=1
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and user_name = #{userName}</if>
+            <if test="userPassword != null  and userPassword != ''"> and user_password = #{userPassword}</if>
+            <if test="createTime != null"> and create_time = #{createTime}</if>
+            <if test="updateTime != null"> and update_time = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="dalFlag != null  and dalFlag != ''"> and dal_flag = #{dalFlag}</if>
+        </where>
+    </select>
+
+    <select id="selectSysUserByUserId" parameterType="String">
+        <include refid="selectSysUser"></include>
+        where user_id = #{userId}
+        limit 0,1
+    </select>
+
+</mapper>

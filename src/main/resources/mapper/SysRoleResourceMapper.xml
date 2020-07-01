@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksc.framework.Mapper.SysRoleResourceMapper">
+
+    <resultMap id="BaseResultMap" type="com.zksc.framework.Entity.SysRoleResource">
+        <result column="role_resource_id" property="roleResourceId" />
+        <result column="role_id" property="roleId" />
+        <result column="resource_id" property="resourceId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="del_flag" property="delFlag" />
+    </resultMap>
+
+    <sql id="selectSysRoleResource">
+        select
+        role_resource_id,
+        role_id,
+        resource_id,
+        create_time,
+        update_time,
+        create_by,
+        update_by,
+        del_flag
+        FROM sys_role_resource
+    </sql>
+
+    <insert id="insertSysRoleResource" parameterType="SysRoleResource">
+        insert into sys_role_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleResourceId != null  and roleResourceId != ''">role_resource_id,</if>
+            <if test="roleId != null  and roleId != ''">role_id,</if>
+            <if test="resourceId != null  and resourceId != ''">resource_id,</if>
+            <if test="createTime != null">createTime,</if>
+            <if test="updateTime != null">updateTime,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleResourceId != null  and roleResourceId != ''">#{roleResourceId},</if>
+            <if test="roleId != null  and roleId != ''">#{roleId},</if>
+            <if test="resourceId != null  and resourceId != ''">#{resourceId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteSysRoleResourceByRoleResourceId" parameterType="String">
+        delete from sys_role_resource where role_resource_id = #{roleResourceId}
+    </delete>
+
+    <delete id="deleteSysRoleResourceByRoleResourceIds" parameterType="String">
+        delete from sys_role_resource where role_resource_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+        #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateSysRoleResource" parameterType="SysRoleResource">
+        update sys_role_resource
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleResourceId != null  and roleResourceId != ''">role_resource_id = #{roleResourceId},</if>
+            <if test="roleId != null  and roleId != ''">role_id = #{roleId},</if>
+            <if test="resourceId != null  and resourceId != ''">resource_id = #{resourceId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        <where>
+        role_resource_id = #{roleResourceId}
+        </where>
+    </update>
+
+    <select id="selectSysRoleResourceList" resultMap="BaseResultMap" parameterType="SysRoleResource">
+        <include refid="selectSysRoleResource"></include>
+        <where>
+            1=1
+            <if test="roleResourceId != null  and roleResourceId != ''"> and role_resource_id = #{roleResourceId}</if>
+            <if test="roleId != null  and roleId != ''"> and role_id = #{roleId}</if>
+            <if test="resourceId != null  and resourceId != ''"> and resource_id = #{resourceId}</if>
+            <if test="createTime != null"> and create_time = #{createTime}</if>
+            <if test="updateTime != null"> and update_time = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="delFlag != null  and delFlag != ''"> and del_flag = #{delFlag}</if>
+        </where>
+    </select>
+
+    <select id="selectSysRoleResourceByRoleResourceId" parameterType="String">
+        <include refid="selectSysRoleResource"></include>
+        where role_resource_id = #{roleResourceId}
+        limit 0,1
+    </select>
+    
+    <select id="getResourceByRoleId" parameterType="String" resultType="java.util.Map">
+        SELECT sResource.resource_name AS resourceName,sResource.resource_url AS resourceUrl, sResource.resource_permission AS resourcePermission
+        FROM sys_role_resource roleResource
+        LEFT JOIN sys_role sRole ON roleResource.role_id = sRole.role_id
+        LEFT JOIN sys_resource sResource ON roleResource.resource_id = sResource.resoure_id
+        WHERE roleResource.role_id = #{roleId}
+    </select>
+
+</mapper>

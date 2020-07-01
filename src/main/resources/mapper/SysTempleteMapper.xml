@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksc.framework.Mapper.SysTempleteMapper">
+
+    <resultMap id="BaseResultMap" type="com.zksc.framework.Entity.SysTemplete">
+        <result column="templete_id" jdbcType="VARCHAR" property="templeteId" />
+        <result column="database_type" jdbcType="VARCHAR" property="dataBaseType" />
+        <result column="framework_type" jdbcType="VARCHAR" property="frameworkType" />
+        <result column="ftl_path" jdbcType="VARCHAR" property="ftlPath" />
+        <result column="ftl_name" jdbcType="VARCHAR" property="ftlName" />
+        <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+        <result column="file_path" jdbcType="VARCHAR" property="filePath" />
+    </resultMap>
+
+
+    <select id="getTempleteList" parameterType="String" resultMap="BaseResultMap">
+        SELECT templete_id,database_type,framework_type,ftl_path,ftl_name,file_name,file_path
+        FROM sys_templete where 1=1
+        <trim>
+            <if test="frameworkType != null and frameworkType != ''">and framework_type = #{frameworkType}</if>
+        </trim>
+    </select>
+</mapper>

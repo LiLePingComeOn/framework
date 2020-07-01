@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksc.framework.Mapper.SysResourceMapper">
+
+    <resultMap id="BaseResultMap" type="com.zksc.framework.Entity.SysResource">
+        <result column="resoure_id" property="resoureId" />
+        <result column="resource_url" property="resourceUrl" />
+        <result column="resource_name" property="resourceName" />
+        <result column="resource_permission" property="resourcePermission" />
+        <result column="resource_type" property="resourceType" />
+        <result column="resource_parent" property="resourceParent" />
+        <result column="resource_ico" property="resourceIco" />
+        <result column="resource_order" property="resourceOrder" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <sql id="selectSysResource">
+        select
+        resoure_id,
+        resource_url,
+        resource_name,
+        resource_permission,
+        resource_type,
+        resource_parent,
+        resource_ico,
+        resource_order,
+        create_time,
+        update_time,
+        create_by,
+        update_by
+        from sys_resource
+    </sql>
+
+    <insert id="insertSysResource" parameterType="SysResource">
+        <selectKey keyProperty="resoureId" resultType="String" order="BEFORE">
+            select replace(uuid(), '-', '') as resoureId from dual
+        </selectKey>
+        insert into sys_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resoureId != null  and resoureId != ''">resoure_id,</if>
+            <if test="resourceUrl != null  and resourceUrl != ''">resource_url,</if>
+            <if test="resourceName != null  and resourceName != ''">resource_name,</if>
+            <if test="resourcePermission != null  and resourcePermission != ''">resource_permission,</if>
+            <if test="resourceType != null  and resourceType != ''">resource_type,</if>
+            <if test="resourceParent != null  and resourceParent != ''">resource_parent,</if>
+            <if test="resourceIco != null  and resourceIco != ''">resource_ico,</if>
+            <if test="resourceOrder != null  and resourceOrder != ''">resource_order,</if>
+            <if test="createTime != null">createTime,</if>
+            <if test="updateTime != null">updateTime,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="resoureId != null  and resoureId != ''">#{resoureId},</if>
+            <if test="resourceUrl != null  and resourceUrl != ''">#{resourceUrl},</if>
+            <if test="resourceName != null  and resourceName != ''">#{resourceName},</if>
+            <if test="resourcePermission != null  and resourcePermission != ''">#{resourcePermission},</if>
+            <if test="resourceType != null  and resourceType != ''">#{resourceType},</if>
+            <if test="resourceParent != null  and resourceParent != ''">#{resourceParent},</if>
+            <if test="resourceIco != null  and resourceIco != ''">#{resourceIco},</if>
+            <if test="resourceOrder != null  and resourceOrder != ''">#{resourceOrder},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteSysResourceByResoureId" parameterType="String">
+        delete from sys_resource where resoure_id = #{resoureId}
+    </delete>
+
+    <update id="updateSysResource" parameterType="SysResource">
+        update sys_resource
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="resoureId != null  and resoureId != ''">resoure_id = #{resoureId},</if>
+            <if test="resourceUrl != null  and resourceUrl != ''">resource_url = #{resourceUrl},</if>
+            <if test="resourceName != null  and resourceName != ''">resource_name = #{resourceName},</if>
+            <if test="resourcePermission != null  and resourcePermission != ''">resource_permission = #{resourcePermission},</if>
+            <if test="resourceType != null  and resourceType != ''">resource_type = #{resourceType},</if>
+            <if test="resourceParent != null  and resourceParent != ''">resource_parent = #{resourceParent},</if>
+            <if test="resourceIco != null  and resourceIco != ''">resource_ico = #{resourceIco},</if>
+            <if test="resourceOrder != null  and resourceOrder != ''">resource_order = #{resourceOrder},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+        </trim>
+        <where>
+        resoure_id = #{resoureId}
+        </where>
+    </update>
+
+    <select id="selectSysResourceList" resultMap="BaseResultMap" parameterType="SysResource">
+        <include refid="selectSysResource"></include>
+        <where>
+            1=1
+            <if test="resoureId != null  and resoureId != ''"> and resoure_id = #{resoureId}</if>
+            <if test="resourceUrl != null  and resourceUrl != ''"> and resource_url = #{resourceUrl}</if>
+            <if test="resourceName != null  and resourceName != ''"> and resource_name = #{resourceName}</if>
+            <if test="resourcePermission != null  and resourcePermission != ''"> and resource_permission = #{resourcePermission}</if>
+            <if test="resourceType != null  and resourceType != ''"> and resource_type = #{resourceType}</if>
+            <if test="resourceParent != null  and resourceParent != ''"> and resource_parent = #{resourceParent}</if>
+            <if test="resourceIco != null  and resourceIco != ''"> and resource_ico = #{resourceIco}</if>
+            <if test="resourceOrder != null  and resourceOrder != ''"> and resource_order = #{resourceOrder}</if>
+            <if test="createTime != null"> and create_time = #{createTime}</if>
+            <if test="updateTime != null"> and update_time = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+        </where>
+    </select>
+
+    <select id="selectSysResourceByResoureId" parameterType="String">
+        <include refid="selectSysResource"></include>
+        where resoure_id = #{resoureId}
+    </select>
+
+</mapper>

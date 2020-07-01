@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksc.framework.Mapper.SysUserRoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.zksc.framework.Entity.SysUserRole">
+        <result column="user_role_id" property="userRoleId" />
+        <result column="role_id" property="roleId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="del_flag" property="delFlag" />
+        <result column="role_user_id" property="roleUserId" />
+    </resultMap>
+
+    <sql id="selectSysUserRole">
+        select
+        user_role_id,
+        role_id,
+        create_time,
+        update_time,
+        create_by,
+        update_by,
+        del_flag,
+        role_user_id
+        FROM sys_user_role
+    </sql>
+
+    <insert id="insertSysUserRole" parameterType="SysUserRole">
+        insert into sys_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userRoleId != null  and userRoleId != ''">user_role_id,</if>
+            <if test="roleId != null  and roleId != ''">role_id,</if>
+            <if test="createTime != null">createTime,</if>
+            <if test="updateTime != null">updateTime,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="roleUserId != null  and roleUserId != ''">role_user_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userRoleId != null  and userRoleId != ''">#{userRoleId},</if>
+            <if test="roleId != null  and roleId != ''">#{roleId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="roleUserId != null  and roleUserId != ''">#{roleUserId},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteSysUserRoleByUserRoleId" parameterType="String">
+        delete from sys_user_role where user_role_id = #{userRoleId}
+    </delete>
+    <delete id="deleteSysUserRoleByUserRoleIds" parameterType="String">
+        delete from sys_user_role where user_role_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+        #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateSysUserRole" parameterType="SysUserRole">
+        update sys_user_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userRoleId != null  and userRoleId != ''">user_role_id = #{userRoleId},</if>
+            <if test="roleId != null  and roleId != ''">role_id = #{roleId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="roleUserId != null  and roleUserId != ''">role_user_id = #{roleUserId},</if>
+        </trim>
+        <where>
+        user_role_id = #{userRoleId}
+        </where>
+    </update>
+
+    <select id="selectSysUserRoleList" resultMap="BaseResultMap" parameterType="SysUserRole">
+        <include refid="selectSysUserRole"></include>
+        <where>
+            1=1
+            <if test="userRoleId != null  and userRoleId != ''"> and user_role_id = #{userRoleId}</if>
+            <if test="roleId != null  and roleId != ''"> and role_id = #{roleId}</if>
+            <if test="createTime != null"> and create_time = #{createTime}</if>
+            <if test="updateTime != null"> and update_time = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="delFlag != null  and delFlag != ''"> and del_flag = #{delFlag}</if>
+            <if test="roleUserId != null  and roleUserId != ''"> and role_user_id = #{roleUserId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysUserRoleByUserRoleId" parameterType="String">
+        <include refid="selectSysUserRole"></include>
+        where user_role_id = #{userRoleId}
+        limit 0,1
+    </select>
+    
+    <select id="getRoleByUerId" parameterType="String" resultType="java.util.Map">
+      SELECT sRole.role_name AS roleName,sRole.role_id AS roleId FROM sys_user_role userRole
+      LEFT JOIN sys_user sUer ON userRole.role_user_id = sUer.user_id
+      LEFT JOIN sys_role sRole ON userRole.role_id = sRole.role_id
+      WHERE userRole.role_user_id = #{userId}
+    </select>
+
+</mapper>
